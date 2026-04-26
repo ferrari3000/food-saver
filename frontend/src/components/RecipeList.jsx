@@ -5,10 +5,10 @@ export default function RecipeList({ recipes, onSelect }) {
     <div className="recipe-list">
       <h2>Recipes you can make</h2>
       <div className="recipe-grid">
-        {recipes.map(meal => (
-          <div key={meal.idMeal} className="recipe-card" onClick={() => onSelect(meal.idMeal)}>
-            <img src={meal.strMealThumb} alt={meal.strMeal} loading="lazy" />
-            <p>{meal.strMeal}</p>
+        {recipes.map(recipe => (
+          <div key={recipe.id} className="recipe-card" onClick={() => onSelect(recipe.id)}>
+            <img src={recipe.image} alt={recipe.title} loading="lazy" />
+            <p>{recipe.title}</p>
           </div>
         ))}
       </div>
