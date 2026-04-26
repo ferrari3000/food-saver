@@ -1,27 +1,25 @@
 export default function RecipeDetail({ meal, onBack }) {
-  const ingredients = [];
-  for (let i = 1; i <= 20; i++) {
-    const ing = meal[`strIngredient${i}`];
-    const measure = meal[`strMeasure${i}`];
-    if (ing && ing.trim()) {
-      ingredients.push(`${measure ? measure.trim() + ' ' : ''}${ing.trim()}`);
-    }
-  }
+  const ingredients = meal.extendedIngredients?.map(i => i.original) ?? [];
+
+  const steps = meal.analyzedInstructions?.[0]?.steps ?? [];
+  const fallbackInstructions = meal.instructions
+    ? meal.instructions.replace(/<[^>]+>/g, '').split(/\n+/).filter(Boolean)
+    : [];
 
   return (
     <div className="recipe-detail">
       <button className="back-btn" onClick={onBack}>← Back to results</button>
       <div className="detail-header">
-        <img src={meal.strMealThumb} alt={meal.strMeal} />
+        <img src={meal.image} alt={meal.title} />
         <div>
-          <h2>{meal.strMeal}</h2>
+          <h2>{meal.title}</h2>
           <p className="meta">
-            {meal.strCategory && <span>{meal.strCategory}</span>}
-            {meal.strArea && <span>{meal.strArea}</span>}
+            {meal.dishTypes?.[0] && <span>{meal.dishTypes[0]}</span>}
+            {meal.cuisines?.[0] && <span>{meal.cuisines[0]}</span>}
           </p>
-          {meal.strYoutube && (
-            <a href={meal.strYoutube} target="_blank" rel="noreferrer" className="yt-link">
-              Watch on YouTube
+          {meal.sourceUrl && (
+            <a href={meal.sourceUrl} target="_blank" rel="noreferrer" className="yt-link">
+              View Original Recipe
             </a>
           )}
         </div>
@@ -35,9 +33,10 @@ export default function RecipeDetail({ meal, onBack }) {
         </section>
         <section>
           <h3>Instructions</h3>
-          {meal.strInstructions.split('\r\n').filter(Boolean).map((step, i) => (
-            <p key={i}>{step}</p>
-          ))}
+          {steps.length > 0
+            ? steps.map(s => <p key={s.number}><strong>{s.number}.</strong> {s.step}</p>)
+            : fallbackInstructions.map((line, i) => <p key={i}>{line}</p>)
+          }
         </section>
       </div>
     </div>
