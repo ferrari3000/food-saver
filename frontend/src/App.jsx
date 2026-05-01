@@ -3,6 +3,7 @@ import IngredientInput from './components/IngredientInput';
 import RecipeList from './components/RecipeList';
 import RecipeDetail from './components/RecipeDetail';
 import MealPlanner from './components/MealPlanner';
+import headerLogo from './assets/daniel-6qtE-gJIZ90-unsplash.jpg';
 import { searchRecipes } from './api';
 import './App.css';
 
@@ -47,9 +48,11 @@ export default function App() {
 
   return (
     <div className="app">
-      <header>
-        <h1>FoodSaver</h1>
-        <p>Turn your leftovers into a meal</p>
+      <header style={{ backgroundImage: `url(${headerLogo})` }}>
+        <div className="header-overlay">
+          <h1>FoodSaver</h1>
+          <p>Turn your leftovers into a meal</p>
+        </div>
       </header>
       <nav className="tab-bar">
         <button

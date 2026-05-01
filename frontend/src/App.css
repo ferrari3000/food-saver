@@ -18,18 +18,38 @@ body {
 }
 
 header {
-  text-align: center;
-  padding: 40px 0 24px;
+  position: relative;
+  height: 240px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 20px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.header-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 24px 28px;
+  background: linear-gradient(to top, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.1) 60%, transparent 100%);
 }
 
 header h1 {
-  font-size: 2.5rem;
-  color: #2d6a2d;
+  font-size: 2.8rem;
+  color: #fff;
+  letter-spacing: -0.5px;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.4);
 }
 
 header p {
-  color: #666;
+  color: rgba(255,255,255,0.85);
   margin-top: 6px;
+  font-size: 1rem;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.4);
 }
 
 /* Tab bar */
