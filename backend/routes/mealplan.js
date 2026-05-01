@@ -3,11 +3,10 @@ const Anthropic = require('@anthropic-ai/sdk').default;
 const MEALPLAN_SCHEMA = require('../schemas/mealplanSchema');
 const router = express.Router();
 
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-
 const SYSTEM_PROMPT = `You are a weekly meal planning assistant. Given a user's preferred cooking methods and liked ingredients, create a varied and delicious 5-day dinner meal plan (Monday through Friday). Each meal should use the preferred cooking methods and incorporate the liked ingredients where appropriate. Vary the meals so no method or ingredient is overused. Include practical, clearly written recipes. Return only valid JSON matching the provided schema.`;
 
 router.post('/generate', async (req, res) => {
+  const client = new Anthropic();
   const { cookingMethods = [], likedIngredients = [] } = req.body;
 
   try {
@@ -35,7 +34,6 @@ router.post('/generate', async (req, res) => {
       output_config: {
         format: {
           type: 'json_schema',
-          name: 'meal_plan',
           schema: MEALPLAN_SCHEMA,
         },
       },
