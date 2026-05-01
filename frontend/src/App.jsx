@@ -3,6 +3,7 @@ import IngredientInput from './components/IngredientInput';
 import RecipeList from './components/RecipeList';
 import RecipeDetail from './components/RecipeDetail';
 import MealPlanner from './components/MealPlanner';
+import Spinner from './components/Spinner';
 import headerLogo from './assets/daniel-6qtE-gJIZ90-unsplash.jpg';
 import { searchRecipes } from './api';
 import './App.css';
@@ -39,7 +40,8 @@ export default function App() {
       } else {
         setRecipes(data.meals);
       }
-    } catch {
+    } catch (err) {
+      console.error(err);
       setError('Something went wrong. Is the backend running?');
     } finally {
       setLoading(false);
@@ -81,7 +83,7 @@ export default function App() {
                   loading={loading}
                 />
                 {error && <p className="error">{error}</p>}
-                {loading && <p className="loading">Asking Claude for recipes…</p>}
+                {loading && <Spinner />}
                 <RecipeList recipes={recipes} onSelect={setSelectedMeal} />
               </>
             ) : (

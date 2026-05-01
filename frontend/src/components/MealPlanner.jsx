@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { generateMealPlan } from '../api';
+import { generateMealPlan, sendMealPlanEmail } from '../api';
+import Spinner from './Spinner';
 
 const COOKING_METHODS = [
   'Baked', 'Grilled', 'Pan-fried', 'Stir-fry',
@@ -25,6 +26,8 @@ export default function MealPlanner() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [expanded, setExpanded] = useState({});
+  const [emailSending, setEmailSending] = useState(false);
+  const [emailStatus, setEmailStatus] = useState(null);
 
   useEffect(() => {
     localStorage.setItem('mealPlannerPrefs', JSON.stringify({ cookingMethods, likedIngredients }));
@@ -53,6 +56,20 @@ export default function MealPlanner() {
     setExpanded(prev => ({ ...prev, [day]: !prev[day] }));
   }
 
+  async function handleEmail() {
+    setEmailSending(true);
+    setEmailStatus(null);
+    try {
+      await sendMealPlanEmail(plan);
+      setEmailStatus('sent');
+    } catch (err) {
+      console.error(err);
+      setEmailStatus('error');
+    } finally {
+      setEmailSending(false);
+    }
+  }
+
   async function handleGenerate() {
     setLoading(true);
     setError(null);
@@ -61,7 +78,8 @@ export default function MealPlanner() {
       setPlan(data.plan);
       localStorage.setItem('mealPlan', JSON.stringify(data.plan));
       setExpanded({});
-    } catch {
+    } catch (err) {
+      console.error(err);
       setError('Could not generate meal plan. Is the backend running?');
     } finally {
       setLoading(false);
@@ -115,12 +133,20 @@ export default function MealPlanner() {
         >
           {loading ? 'Generating your week…' : 'Generate My Week'}
         </button>
+        {loading && <Spinner />}
         {error && <p className="error">{error}</p>}
       </section>
 
       {plan && (
         <section className="plan-section">
-          <h2>This Week's Dinners</h2>
+          <div className="plan-header">
+            <h2>This Week's Dinners</h2>
+            <button className="email-btn" onClick={handleEmail} disabled={emailSending}>
+              {emailSending ? 'Sending…' : 'Email me this plan'}
+            </button>
+          </div>
+          {emailStatus === 'sent' && <p className="email-success">Sent! Check your inbox.</p>}
+          {emailStatus === 'error' && <p className="error">Couldn't send — check your email config in .env</p>}
           <div className="plan-list">
             {plan.map(meal => (
               <div key={meal.day} className="day-card">
