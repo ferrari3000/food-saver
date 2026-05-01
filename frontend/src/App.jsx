@@ -2,15 +2,18 @@ import { useState } from 'react';
 import IngredientInput from './components/IngredientInput';
 import RecipeList from './components/RecipeList';
 import RecipeDetail from './components/RecipeDetail';
-import { searchRecipes, getRecipe } from './api';
+import MealPlanner from './components/MealPlanner';
+import headerLogo from './assets/daniel-6qtE-gJIZ90-unsplash.jpg';
+import { searchRecipes } from './api';
 import './App.css';
 
 export default function App() {
+  const [activeTab, setActiveTab] = useState('search');
+
   const [ingredients, setIngredients] = useState([]);
   const [recipes, setRecipes] = useState([]);
   const [selectedMeal, setSelectedMeal] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [detailLoading, setDetailLoading] = useState(false);
   const [error, setError] = useState(null);
 
   function addIngredient(ing) {
@@ -43,42 +46,50 @@ export default function App() {
     }
   }
 
-  async function handleSelectRecipe(id) {
-    setDetailLoading(true);
-    setError(null);
-    try {
-      const data = await getRecipe(id);
-      setSelectedMeal(data.meal);
-    } catch {
-      setError('Could not load recipe details.');
-    } finally {
-      setDetailLoading(false);
-    }
-  }
-
   return (
     <div className="app">
-      <header>
-        <h1>FoodSaver</h1>
-        <p>Turn your leftovers into a meal</p>
+      <header style={{ backgroundImage: `url(${headerLogo})` }}>
+        <div className="header-overlay">
+          <h1>FoodSaver</h1>
+          <p>Turn your leftovers into a meal</p>
+        </div>
       </header>
+      <nav className="tab-bar">
+        <button
+          className={`tab-btn${activeTab === 'search' ? ' active' : ''}`}
+          onClick={() => setActiveTab('search')}
+        >
+          Search
+        </button>
+        <button
+          className={`tab-btn${activeTab === 'planner' ? ' active' : ''}`}
+          onClick={() => setActiveTab('planner')}
+        >
+          Meal Planner
+        </button>
+      </nav>
       <main>
-        {!selectedMeal ? (
+        {activeTab === 'search' && (
           <>
-            <IngredientInput
-              ingredients={ingredients}
-              onAdd={addIngredient}
-              onRemove={removeIngredient}
-              onSearch={handleSearch}
-              loading={loading}
-            />
-            {error && <p className="error">{error}</p>}
-            {detailLoading && <p className="loading">Loading recipe…</p>}
-            <RecipeList recipes={recipes} onSelect={handleSelectRecipe} />
+            {!selectedMeal ? (
+              <>
+                <IngredientInput
+                  ingredients={ingredients}
+                  onAdd={addIngredient}
+                  onRemove={removeIngredient}
+                  onSearch={handleSearch}
+                  loading={loading}
+                />
+                {error && <p className="error">{error}</p>}
+                {loading && <p className="loading">Asking Claude for recipes…</p>}
+                <RecipeList recipes={recipes} onSelect={setSelectedMeal} />
+              </>
+            ) : (
+              <RecipeDetail meal={selectedMeal} onBack={() => setSelectedMeal(null)} />
+            )}
           </>
-        ) : (
-          <RecipeDetail meal={selectedMeal} onBack={() => setSelectedMeal(null)} />
         )}
+        {activeTab === 'planner' && <MealPlanner />}
       </main>
     </div>
   );
