@@ -345,6 +345,45 @@ header p {
 }
 
 /* Day cards */
+.plan-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.plan-header h2 {
+  margin-bottom: 0;
+}
+
+.email-btn {
+  padding: 8px 18px;
+  background: none;
+  border: 2px solid #2d6a2d;
+  color: #2d6a2d;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.email-btn:hover {
+  background: #2d6a2d;
+  color: white;
+}
+
+.email-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.email-success {
+  color: #2d6a2d;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+
 .plan-list {
   display: flex;
   flex-direction: column;
@@ -413,6 +452,21 @@ header p {
   color: #888;
   font-size: 0.85rem;
   margin: 14px 0 16px;
+}
+
+/* Spinner */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #d4ead4;
+  border-top-color: #2d6a2d;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin: 28px auto;
 }
 
 /* States */

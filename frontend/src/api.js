@@ -10,6 +10,16 @@ export async function searchRecipes(ingredients) {
   return res.json();
 }
 
+export async function sendMealPlanEmail(plan) {
+  const res = await fetch(`${BASE}/email/mealplan`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ plan }),
+  });
+  if (!res.ok) throw new Error('Failed to send email');
+  return res.json();
+}
+
 export async function generateMealPlan(cookingMethods, likedIngredients) {
   const res = await fetch(`${BASE}/mealplan/generate`, {
     method: 'POST',
