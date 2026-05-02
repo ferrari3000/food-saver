@@ -1,5 +1,5 @@
 const express = require('express');
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 const router = express.Router();
 
 function buildHtml(plan) {
@@ -37,18 +37,12 @@ router.post('/mealplan', async (req, res) => {
     return res.status(400).json({ error: 'plan array required' });
   }
 
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_APP_PASSWORD,
-    },
-  });
+  const resend = new Resend(process.env.RESEND_API_KEY);
 
   try {
-    await transporter.sendMail({
-      from: `FoodSaver <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_USER,
+    await resend.emails.send({
+      from: 'FoodSaver <onboarding@resend.dev>',
+      to: process.env.EMAIL_TO,
       subject: "This Week's Dinners — FoodSaver",
       html: buildHtml(plan),
     });
