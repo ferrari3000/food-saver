@@ -76,6 +76,7 @@ export default function MealPlanner() {
     try {
       const data = await generateMealPlan(cookingMethods, likedIngredients);
       setPlan(data.plan);
+      console.log(data);
       localStorage.setItem('mealPlan', JSON.stringify(data.plan));
       setExpanded({});
     } catch (err) {
@@ -84,6 +85,13 @@ export default function MealPlanner() {
     } finally {
       setLoading(false);
     }
+  }
+
+  function handleClear() {
+    setCookingMethods([]);
+    setLikedIngredients([]);
+    setPlan(null);
+    localStorage.removeItem('mealPlan');
   }
 
   return (
@@ -125,14 +133,23 @@ export default function MealPlanner() {
             ))}
           </div>
         </div>
-
-        <button
-          className="search-btn"
-          onClick={handleGenerate}
-          disabled={loading}
-        >
-          {loading ? 'Generating your week…' : 'Generate My Week'}
-        </button>
+        
+        <div className="button-container">
+          <button
+            className="search-btn"
+            onClick={handleGenerate}
+            disabled={loading}
+          >
+            {loading ? 'Generating your week…' : 'Generate My Week'}
+          </button>
+          <button
+            className="clear-btn"
+            onClick={handleClear}
+            disabled={loading}
+          >
+            {'Clear'}
+          </button>
+        </div>
         {loading && <Spinner />}
         {error && <p className="error">{error}</p>}
       </section>

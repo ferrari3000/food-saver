@@ -150,8 +150,30 @@ header p {
   padding: 0;
 }
 
+.button-container {
+  display: flex;
+  margin-top: 10%;
+  gap: 8px;
+}
+
+.clear-btn {
+  padding: 12px 28px;
+  justify-self: self-end;
+  background: #2d6a2d;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 50%;
+}
+
+.clear-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
 .search-btn {
-  margin-top: 16px;
   padding: 12px 28px;
   background: #2d6a2d;
   color: white;
