@@ -86,6 +86,13 @@ export default function MealPlanner() {
     }
   }
 
+  function handleClear() {
+    setCookingMethods([]);
+    setLikedIngredients([]);
+    setPlan(null);
+    localStorage.removeItem('mealPlan');
+  }
+
   return (
     <div className="meal-planner">
       <section className="prefs-section">
@@ -125,14 +132,23 @@ export default function MealPlanner() {
             ))}
           </div>
         </div>
-
-        <button
-          className="search-btn"
-          onClick={handleGenerate}
-          disabled={loading}
-        >
-          {loading ? 'Generating your week…' : 'Generate My Week'}
-        </button>
+        
+        <div className="button-container">
+          <button
+            className="search-btn"
+            onClick={handleGenerate}
+            disabled={loading}
+          >
+            {loading ? 'Generating your week…' : 'Generate My Week'}
+          </button>
+          <button
+            className="clear-btn"
+            onClick={handleClear}
+            disabled={loading}
+          >
+            {'Clear'}
+          </button>
+        </div>
         {loading && <Spinner />}
         {error && <p className="error">{error}</p>}
       </section>
