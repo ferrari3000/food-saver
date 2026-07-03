@@ -76,7 +76,6 @@ export default function MealPlanner() {
     try {
       const data = await generateMealPlan(cookingMethods, likedIngredients);
       setPlan(data.plan);
-      console.log(data);
       localStorage.setItem('mealPlan', JSON.stringify(data.plan));
       setExpanded({});
     } catch (err) {
