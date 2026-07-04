@@ -32,9 +32,12 @@ function buildHtml(plan) {
 }
 
 router.post('/mealplan', async (req, res) => {
-  const { plan } = req.body;
+  const { plan, to } = req.body;
   if (!plan || !Array.isArray(plan)) {
     return res.status(400).json({ error: 'plan array required' });
+  }
+  if (!to) {
+    return res.status(400).json({ error: 'to email address required' });
   }
 
   const resend = new Resend(process.env.RESEND_API_KEY);
@@ -42,7 +45,7 @@ router.post('/mealplan', async (req, res) => {
   try {
     await resend.emails.send({
       from: 'FoodSaver <onboarding@resend.dev>',
-      to: process.env.EMAIL_TO,
+      to,
       subject: "This Week's Dinners — FoodSaver",
       html: buildHtml(plan),
     });

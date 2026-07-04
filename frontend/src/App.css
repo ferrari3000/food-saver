@@ -491,6 +491,86 @@ header p {
   margin: 28px auto;
 }
 
+/* Email dialog */
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.dialog {
+  background: white;
+  border-radius: 16px;
+  padding: 28px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+}
+
+.dialog h3 {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.dialog p {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+
+.dialog-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  margin-bottom: 16px;
+}
+
+.dialog-input:focus {
+  outline: none;
+  border-color: #2d6a2d;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.dialog-cancel {
+  padding: 9px 20px;
+  background: none;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  color: #444;
+}
+
+.dialog-cancel:hover {
+  border-color: #999;
+}
+
+.dialog-send {
+  padding: 9px 20px;
+  background: #2d6a2d;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.dialog-send:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
 /* States */
 .error {
   margin-top: 16px;

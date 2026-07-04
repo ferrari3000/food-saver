@@ -28,6 +28,8 @@ export default function MealPlanner() {
   const [expanded, setExpanded] = useState({});
   const [emailSending, setEmailSending] = useState(false);
   const [emailStatus, setEmailStatus] = useState(null);
+  const [showEmailDialog, setShowEmailDialog] = useState(false);
+  const [emailInput, setEmailInput] = useState('');
 
   useEffect(() => {
     localStorage.setItem('mealPlannerPrefs', JSON.stringify({ cookingMethods, likedIngredients }));
@@ -56,12 +58,15 @@ export default function MealPlanner() {
     setExpanded(prev => ({ ...prev, [day]: !prev[day] }));
   }
 
-  async function handleEmail() {
+  async function handleEmail(e) {
+    e.preventDefault();
+    setShowEmailDialog(false);
     setEmailSending(true);
     setEmailStatus(null);
     try {
-      await sendMealPlanEmail(plan);
+      await sendMealPlanEmail(plan, emailInput);
       setEmailStatus('sent');
+      setEmailInput('');
     } catch (err) {
       console.error(err);
       setEmailStatus('error');
@@ -157,7 +162,7 @@ export default function MealPlanner() {
         <section className="plan-section">
           <div className="plan-header">
             <h2>This Week's Dinners</h2>
-            <button className="email-btn" onClick={handleEmail} disabled={emailSending}>
+            <button className="email-btn" onClick={() => setShowEmailDialog(true)} disabled={emailSending}>
               {emailSending ? 'Sending…' : 'Email me this plan'}
             </button>
           </div>
@@ -197,6 +202,29 @@ export default function MealPlanner() {
             ))}
           </div>
         </section>
+      )}
+      {showEmailDialog && (
+        <div className="dialog-overlay" onClick={() => setShowEmailDialog(false)}>
+          <div className="dialog" onClick={e => e.stopPropagation()}>
+            <h3>Send meal plan</h3>
+            <p>Enter the email address you'd like to send this plan to.</p>
+            <form onSubmit={handleEmail}>
+              <input
+                type="email"
+                className="dialog-input"
+                placeholder="you@example.com"
+                value={emailInput}
+                onChange={e => setEmailInput(e.target.value)}
+                autoFocus
+                required
+              />
+              <div className="dialog-actions">
+                <button type="button" className="dialog-cancel" onClick={() => setShowEmailDialog(false)}>Cancel</button>
+                <button type="submit" className="dialog-send" disabled={!emailInput.trim()}>Send</button>
+              </div>
+            </form>
+          </div>
+        </div>
       )}
     </div>
   );
