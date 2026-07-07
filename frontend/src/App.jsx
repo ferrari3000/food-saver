@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import IngredientInput from './components/IngredientInput';
 import RecipeList from './components/RecipeList';
 import RecipeDetail from './components/RecipeDetail';
@@ -11,11 +11,17 @@ import './App.css';
 export default function App() {
   const [activeTab, setActiveTab] = useState('search');
 
-  const [ingredients, setIngredients] = useState([]);
+  const [ingredients, setIngredients] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('searchIngredients') || '[]'); } catch { return []; }
+  });
   const [recipes, setRecipes] = useState([]);
   const [selectedMeal, setSelectedMeal] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    localStorage.setItem('searchIngredients', JSON.stringify(ingredients));
+  }, [ingredients]);
 
   function addIngredient(ing) {
     const normalized = ing.toLowerCase();
