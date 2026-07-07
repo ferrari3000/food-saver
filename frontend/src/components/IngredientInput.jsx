@@ -20,7 +20,7 @@ export default function IngredientInput({ ingredients, onAdd, onRemove, onSearch
 
   return (
     <div className="ingredient-input">
-      <h2>What's in your fridge?</h2>
+      <h2>What's in your fridge or pantry?</h2>
       <div className="input-row">
         <input
           type="text"
