@@ -152,7 +152,6 @@ header p {
 
 .button-container {
   display: flex;
-  margin-top: 10%;
   gap: 8px;
 }
 
@@ -171,6 +170,10 @@ header p {
 .clear-btn:disabled {
   opacity: 0.4;
   cursor: default;
+}
+
+.ingredient-input .search-btn {
+  margin-top: 16px;
 }
 
 .search-btn {
