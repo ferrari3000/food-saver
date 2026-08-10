@@ -43,12 +43,16 @@ router.post('/mealplan', async (req, res) => {
   const resend = new Resend(process.env.RESEND_API_KEY);
 
   try {
-    await resend.emails.send({
+    const { error } = await resend.emails.send({
       from: 'FoodSaver <onboarding@resend.dev>',
       to,
       subject: "This Week's Dinners — FoodSaver",
       html: buildHtml(plan),
     });
+    if (error) {
+      console.error(error);
+      return res.status(502).json({ error: error.message || 'Failed to send email' });
+    }
     res.json({ ok: true });
   } catch (err) {
     console.error(err);
